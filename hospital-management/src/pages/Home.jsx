@@ -43,7 +43,7 @@ const Home = () => {
             <span className="text-white text-lg font-semibold">HMS</span>
           </Link>
 
-          <div className="hidden sm:flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
             <Link to="/login" className="text-blue-100 hover:text-white transition">Login</Link>
             <Link to="/login?admin=true" className="text-blue-100 hover:text-white transition">Admin</Link>
             <Link to="/book" className="inline-flex items-center bg-white text-blue-700 px-4 py-2 rounded-lg font-medium shadow-md hover:opacity-90">
