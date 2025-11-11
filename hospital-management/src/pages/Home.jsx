@@ -35,7 +35,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-indigo-900/80 to-purple-900/80" />
 
-        {/* Navbar with Mobile Menu */} 
+        {/* Navbar with Mobile Menu */}
         <nav className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center space-x-2 hover:opacity-80 transition">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md">
@@ -72,7 +72,7 @@ const Home = () => {
 
       {/* Features */}
       <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"> {/* fade grid */}
           {features.map((f) => (
             <div key={f.title} className="bg-white rounded-xl shadow p-6 hover:shadow-xl transition">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center mb-4">
