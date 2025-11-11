@@ -21,10 +21,11 @@ dist/
 dist-ssr/
 build/
 
-# Local environment files
 .env
 .env.*
-.env.local
+backend/.env
+backend/.env.*
+
 
 # OS files
 .DS_Store
