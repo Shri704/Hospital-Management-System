@@ -14,8 +14,20 @@ dotenv.config();
 // Initialize App
 const app = express();
 
+// ✅ Corrected CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://hospital-management-system-kappa-lilac.vercel.app"
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 // Middlewares
-app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10mb" }));
