@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: Hospital Management System API
+  version: 1.0.0
+  description: REST API for Hospital Management System (Auth, Patients, Doctors, Appointments, Billing, Pharmacy)
+
+servers:
+  - url: http://localhost:5000/api
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        role: { type: string }
+
+    Patient:
+      type: object
+      properties:
+        id: { type: string }
+        firstName: { type: string }
+        lastName: { type: string }
+        gender: { type: string }
+        bloodGroup: { type: string }
+
+    Doctor:
+      type: object
+      properties:
+        id: { type: string }
+        firstName: { type: string }
+        lastName: { type: string }
+        specialization: { type: string }
+
+security:
+  - bearerAuth: []
+
+paths:
+
+  /auth/login:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "200": { description: Login success }
+
+  /auth/register:
+    post:
+      summary: Register new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+                role: { type: string }
+      responses:
+        "201": { description: Registered }
+
+  /patients:
+    get:
+      summary: Get all patients
+      tags: [Patients]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Patient list }
+    post:
+      summary: Create new patient
+      tags: [Patients]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Patient"
+      responses:
+        "201": { description: Patient created }
+
+  /patients/{id}:
+    get:
+      summary: Get patient by ID
+      tags: [Patients]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: Patient data }
+
+    patch:
+      summary: Update patient
+      tags: [Patients]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Updated }
+
+    delete:
+      summary: Delete(patient soft delete)
+      tags: [Patients]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Deleted }
+
+  /doctors:
+    get:
+      summary: List doctors
+      tags: [Doctors]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Doctor list }
+
+    post:
+      summary: Create doctor
+      tags: [Doctors]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "201": { description: Doctor created }
+
+  /appointments:
+    get:
+      summary: List appointments
+      tags: [Appointments]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Appointment list }
+
+    post:
+      summary: Create appointment
+      tags: [Appointments]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "201": { description: Appointment created }
+
+  /appointments/{id}/status:
+    patch:
+      summary: Update appointment status
+      tags: [Appointments]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Status updated }
+
+  /invoices:
+    get:
+      summary: List invoices
+      tags: [Invoices]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Invoice list }
+
+    post:
+      summary: Create invoice
+      tags: [Invoices]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "201": { description: Invoice created }
