@@ -14,15 +14,23 @@ dotenv.config();
 // Initialize App
 const app = express();
 
-// ✅ Corrected CORS
+// ✅ Allowed Origins (added new Vercel domain)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://hospital-management-system-kappa-lilac.vercel.app"
+  "https://hospital-management-system-kappa-lilac.vercel.app",
+  "https://hospital-management-system-ten-olive.vercel.app"
 ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ CORS Blocked:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
