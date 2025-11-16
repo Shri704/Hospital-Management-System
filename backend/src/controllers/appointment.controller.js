@@ -10,6 +10,25 @@ export const list = asyncHandler(async (req, res) => {
   const { from, to, status } = req.query;
   const filter = { isDeleted: false };
 
+  // If user is a patient, filter appointments to only show their own
+  if (req.user?.role === 'patient') {
+    // Find the Patient record that matches the logged-in user by email or phone
+    const patient = await Patient.findOne({
+      $or: [
+        { email: req.user.email },
+        { phone: req.user.phone }
+      ],
+      isDeleted: false
+    });
+
+    if (patient) {
+      filter.patient = patient._id;
+    } else {
+      // If no patient record found, return empty array
+      return res.json(new ApiResponse({ data: [] }));
+    }
+  }
+
   if (from || to) {
     filter.date = {
       ...(from && { $gte: new Date(from) }),
@@ -28,7 +47,34 @@ export const list = asyncHandler(async (req, res) => {
 
 // 📌 Create appointment
 export const create = asyncHandler(async (req, res) => {
-  const appt = await Appointment.create(req.body);
+  let appointmentData = { ...req.body };
+
+  // If user is a patient, automatically use their Patient record
+  if (req.user?.role === 'patient') {
+    const patient = await Patient.findOne({
+      $or: [
+        { email: req.user.email },
+        { phone: req.user.phone }
+      ],
+      isDeleted: false
+    });
+
+    if (patient) {
+      appointmentData.patient = patient._id.toString();
+    } else {
+      // If no patient record found, create one from user data
+      const newPatient = await Patient.create({
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+        phone: req.user.phone || '',
+        gender: 'other'
+      });
+      appointmentData.patient = newPatient._id.toString();
+    }
+  }
+
+  const appt = await Appointment.create(appointmentData);
   await appt.populate('patient doctor');
   res
     .status(httpStatus.CREATED)

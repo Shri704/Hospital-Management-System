@@ -7,13 +7,16 @@ export const createRoomSchema = Joi.object({
   body: Joi.object({
     roomNumber: Joi.string().required().trim(),
     type: Joi.string()
-      .valid("general", "private", "icu", "emergency", "ward")
+      .valid("general", "private", "ICU", "emergency", "operation")
       .required(),
     capacity: Joi.number().min(1).default(1),
-    occupied: Joi.number().min(0).default(0),
+    occupiedBeds: Joi.number().min(0).default(0),
     status: Joi.string()
       .valid("available", "occupied", "maintenance")
-      .default("available")
+      .default("available"),
+    patient: Joi.array().items(Joi.string()).optional(),
+    admittedDate: Joi.date().optional(),
+    dischargedDate: Joi.date().optional()
   }),
 
   params: Joi.object(),
@@ -27,13 +30,16 @@ export const updateRoomSchema = Joi.object({
   body: Joi.object({
     roomNumber: Joi.string().optional().trim(),
     type: Joi.string()
-      .valid("general", "private", "icu", "emergency", "ward")
+      .valid("general", "private", "ICU", "emergency", "operation")
       .optional(),
     capacity: Joi.number().min(1).optional(),
-    occupied: Joi.number().min(0).optional(),
+    occupiedBeds: Joi.number().min(0).optional(),
     status: Joi.string()
       .valid("available", "occupied", "maintenance")
-      .optional()
+      .optional(),
+    patient: Joi.array().items(Joi.string()).optional(),
+    admittedDate: Joi.date().optional(),
+    dischargedDate: Joi.date().optional()
   }),
 
   params: Joi.object({

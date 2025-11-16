@@ -34,16 +34,9 @@ const Appointments = () => {
     try {
       setLoading(true);
       
-      // Always fetch appointments
+      // Fetch appointments - backend now handles filtering for patients
       const apptsRes = await appointmentService.getAll();
-      let allAppointments = apptsRes?.data || apptsRes || [];
-      
-      // Filter appointments for patients to only show their own
-      if (isPatient && user?._id) {
-        allAppointments = allAppointments.filter(
-          (appt) => appt.patient?._id === user._id || appt.patient === user._id
-        );
-      }
+      const allAppointments = apptsRes?.data || apptsRes || [];
       
       setAppointments(allAppointments);
 

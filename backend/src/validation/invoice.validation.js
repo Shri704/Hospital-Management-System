@@ -32,6 +32,7 @@ export const createInvoiceSchema = Joi.object({
           name: Joi.string().required().trim(),
           quantity: Joi.number().min(1).required(),
           unitPrice: Joi.number().min(0).required(),
+          total: Joi.number().min(0).optional(),
         })
       )
       .min(1)
@@ -42,9 +43,17 @@ export const createInvoiceSchema = Joi.object({
 
     amountPaid: Joi.number().min(0).optional(),
 
+    balanceDue: Joi.number().min(0).optional(),
+
     paymentMethod: Joi.string()
       .valid("cash", "card", "upi", "insurance", "other")
       .default("cash"),
+
+    billingType: Joi.string()
+      .valid("full", "admission", "discharge")
+      .default("full"),
+
+    admissionPayment: Joi.number().min(0).optional(),
 
     insuranceDetails: Joi.object({
       provider: Joi.string().optional().allow("", null),
@@ -75,7 +84,8 @@ export const updateInvoiceSchema = Joi.object({
         Joi.object({
           name: Joi.string().required().trim(),
           quantity: Joi.number().min(1).required(),
-          unitPrice: Joi.number().min(0).required()
+          unitPrice: Joi.number().min(0).required(),
+          total: Joi.number().min(0).optional(),
         })
       )
       .optional(),
@@ -83,6 +93,7 @@ export const updateInvoiceSchema = Joi.object({
     tax: Joi.number().min(0).max(100).optional(),
     discount: Joi.number().min(0).max(100).optional(),
     amountPaid: Joi.number().min(0).optional(),
+    balanceDue: Joi.number().min(0).optional(),
     doctor: Joi.string().optional(),
     department: Joi.string().optional(),
     patientDetails: Joi.object({
@@ -113,7 +124,13 @@ export const updateInvoiceSchema = Joi.object({
 
     paymentMethod: Joi.string()
       .valid("cash", "card", "upi", "insurance", "other")
-      .optional()
+      .optional(),
+
+    billingType: Joi.string()
+      .valid("full", "admission", "discharge")
+      .optional(),
+
+    admissionPayment: Joi.number().min(0).optional()
   }),
 
   params: Joi.object({
